@@ -54,6 +54,10 @@ background-color: rgba(101,18,95,0.5);
  .links-container .navbar-link:hover {
      color: rgb(233,50,117);
  }
+ .links-container .navbar-link:active{
+   color:rgb(233,50,117);
+   background-color: white;
+ }
 .container {
   margin: 0 auto;
   max-width: 64rem;
