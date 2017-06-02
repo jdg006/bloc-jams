@@ -27,6 +27,20 @@ var albumPicasso = {
          { title: 'Wrong phone number', duration: '2:15'}
      ]
  };
+ var albumMy = {
+     title: 'The title',
+     artist: 'The artist',
+     label: 'The label',
+     year: '1643',
+     albumArtUrl: 'assets/images/album_covers/20.png',
+     songs: [
+         { title: 'The first song', duration: '1:00' },
+         { title: 'The second song', duration: '2:00' },
+         { title: 'The third song', duration: '3:00'},
+         { title: 'The fourth song', duration: '4:00' },
+         { title: 'The fifth song', duration: '5:00'}
+     ]
+ };
  var createSongRow = function(songNumber, songName, songLength) {
      var template =
         '<tr class="album-view-song-item">'
@@ -38,6 +52,13 @@ var albumPicasso = {
 
      return template;
  };
+
+ var albumTitle = document.getElementsByClassName('album-view-title')[0];
+ var albumArtist = document.getElementsByClassName('album-view-artist')[0];
+ var albumReleaseInfo = document.getElementsByClassName('album-view-release-info')[0];
+ var albumImage = document.getElementsByClassName('album-cover-art')[0];
+ var albumSongList = document.getElementsByClassName('album-view-song-list')[0];
+
  var setCurrentAlbum = function(album) {
 
      var albumTitle = document.getElementsByClassName('album-view-title')[0];
@@ -52,7 +73,7 @@ var albumPicasso = {
      albumImage.setAttribute('src', album.albumArtUrl);
 
      albumSongList.innerHTML = '';
- 
+
      for (var i = 0; i < album.songs.length; i++) {
          albumSongList.innerHTML += createSongRow(i + 1, album.songs[i].title, album.songs[i].duration);
      }
@@ -60,4 +81,13 @@ var albumPicasso = {
 
  window.onload = function() {
      setCurrentAlbum(albumPicasso);
+var albums = [albumPicasso, albumMarconi, albumMy];
+var index=1;
+     albumImage.addEventListener("click",function(event) {
+       setCurrentAlbum(albums[index]);
+       index++;
+       if (index == albums.length){
+         index=0;
+       }
+     });
  };
