@@ -81,31 +81,40 @@ var albumPicasso = {
 
  var findParentByClassName = function(element, targetClass) {
      if (element) {
+       if(element.parentElement===null){
+         console.log("No Parent Found")
+         return;
+       }
          var currentParent = element.parentElement;
+
          while (currentParent.className !== targetClass && currentParent.className !== null) {
              currentParent = currentParent.parentElement;
+           if (currentParent===null){
+             console.log("No parent found with that class name")
+             return;
+           }
          }
          return currentParent;
      }
  };
 
  var getSongItem = function(element) {
-     switch (element.className) {
-         case 'album-song-button':
-         case 'ion-play':
-         case 'ion-pause':
-             return findParentByClassName(element, 'song-item-number');
-         case 'album-view-song-item':
-             return element.querySelector('.song-item-number');
-         case 'song-item-title':
-         case 'song-item-duration':
-             return findParentByClassName(element, 'album-view-song-item').querySelector('.song-item-number');
-         case 'song-item-number':
-             return element;
-         default:
-             return;
-     }
- };
+    switch (element.className) {
+        case 'album-song-button':
+        case 'ion-play':
+        case 'ion-pause':
+            return findParentByClassName(element, 'song-item-number');
+        case 'album-view-song-item':
+            return element.querySelector('.song-item-number');
+        case 'song-item-title':
+        case 'song-item-duration':
+            return findParentByClassName(element, 'album-view-song-item').querySelector('.song-item-number');
+        case 'song-item-number':
+            return element;
+        default:
+            return;
+    }
+};
  var clickHandler = function(targetElement) {
    var songItem = getSongItem(targetElement);
    if (currentlyPlayingSong === null) {
@@ -145,10 +154,10 @@ var index=1;
      songListContainer.addEventListener('mouseover', function(event) {
        if (event.target.parentElement.className === 'album-view-song-item') {
          var songItem = getSongItem(event.target);
-+
-+            if (songItem.getAttribute('data-song-number') !== currentlyPlayingSong) {
-+                songItem.innerHTML = playButtonTemplate;
-+            }
+
+           if (songItem.getAttribute('data-song-number') !== currentlyPlayingSong) {
+               songItem.innerHTML = playButtonTemplate;
+           }
         }
      });
      for (var i = 0; i < songRows.length; i++) {
