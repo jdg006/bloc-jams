@@ -111,11 +111,14 @@ var currentSoundFile=null;
 var currentVolume = 80;
 var $previousButton = $('.main-controls .previous');
 var $nextButton = $('.main-controls .next');
+var $playPauseButton= $('.main-controls .play-pause');
 
  $(document).ready(function() {
      setCurrentAlbum(albumPicasso);
      $previousButton.click(previousSong);
      $nextButton.click(nextSong);
+    // $playPauseButton.click(togglePlayFromPlayerBar);
+
      var albums = [albumPicasso, albumMarconi, albumMy];
      var index=1;
      albumImage.addEventListener("click",function(event) {
@@ -125,6 +128,9 @@ var $nextButton = $('.main-controls .next');
          index=0;
        }
    });
+
+
+
 });
 var updatePlayerBarSong = function() {
 
