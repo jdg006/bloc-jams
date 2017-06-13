@@ -117,7 +117,7 @@ var $playPauseButton= $('.main-controls .play-pause');
      setCurrentAlbum(albumPicasso);
      $previousButton.click(previousSong);
      $nextButton.click(nextSong);
-    // $playPauseButton.click(togglePlayFromPlayerBar);
+     $playPauseButton.click(togglePlayFromPlayerBar);
 
      var albums = [albumPicasso, albumMarconi, albumMy];
      var index=1;
@@ -214,3 +214,22 @@ var setVolume = function(volume) {
 var getSongNumberCell= function(number){
   return $('.song-item-number[data-song-number="' + number + '"]');
 }
+
+var togglePlayFromPlayerBar= function(){
+
+if (currentSoundFile.isPaused()){
+
+
+  getSongNumberCell(currentlyPlayingSongNumber).html(pauseButtonTemplate);
+  $('.main-controls .play-pause').html(playerBarPauseButton);
+  currentSoundFile.play();
+}
+else{
+
+  getSongNumberCell(currentlyPlayingSongNumber).html(playButtonTemplate);
+  $('.main-controls .play-pause').html(playerBarPlayButton);
+  currentSoundFile.stop();
+
+}
+
+};
