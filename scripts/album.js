@@ -3,7 +3,7 @@ var createSongRow = function(songNumber, songName, songLength) {
         '<tr class="album-view-song-item">'
       + '  <td class="song-item-number" data-song-number="' + songNumber + '">' + songNumber + '</td>'
       + '  <td class="song-item-title">' + songName + '</td>'
-      + '  <td class="song-item-duration">' + songLength + '</td>'
+      + '  <td class="song-item-duration">' + filterTimeCode(songLength) + '</td>'
       + '</tr>'
       ;
 
@@ -14,7 +14,7 @@ var createSongRow = function(songNumber, songName, songLength) {
 
       if (currentlyPlayingSongNumber !== null) {
               var currentlyPlayingCell = getSongNumberCell(currentlyPlayingSongNumber);
-               currentlyPlayingCell.html(currentlyPlayingSongNumber);
+               currentlyPlayingCell.html(currentlyPlayingSongNumber)
 
        }
 
@@ -27,6 +27,7 @@ var createSongRow = function(songNumber, songName, songLength) {
            $volumeThumb.css({left: currentVolume + '%'});
            setSong(songNumber);
            currentSoundFile.play();
+           updateSeekBarWhileSongPlays();
            updatePlayerBarSong();
 
       } else if (currentlyPlayingSongNumber === songNumber) {
@@ -34,6 +35,7 @@ var createSongRow = function(songNumber, songName, songLength) {
                 $(this).html(pauseButtonTemplate);
                 $('.main-controls .play-pause').html(playerBarPauseButton);
                 currentSoundFile.play();
+                updateSeekBarWhileSongPlays();
            } else {
                $(this).html(playButtonTemplate);
                 $('.main-controls .play-pause').html(playerBarPlayButton);
@@ -99,13 +101,15 @@ var createSongRow = function(songNumber, songName, songLength) {
 
  var updateSeekBarWhileSongPlays = function() {
       if (currentSoundFile) {
-          // #10
+
           currentSoundFile.bind('timeupdate', function(event) {
-              // #11
+
               var seekBarFillRatio = this.getTime() / this.getDuration();
               var $seekBar = $('.seek-control .seek-bar');
-
               updateSeekPercentage($seekBar, seekBarFillRatio);
+
+              setCurrentTimeInPlayerBar(filterTimeCode(this.getTime()));
+
           });
       }
   };
@@ -192,6 +196,7 @@ var $playPauseButton= $('.main-controls .play-pause');
      $nextButton.click(nextSong);
      $playPauseButton.click(togglePlayFromPlayerBar);
 
+
      var albums = [albumPicasso, albumMarconi, albumMy];
      var index=1;
      albumImage.addEventListener("click",function(event) {
@@ -207,10 +212,13 @@ var $playPauseButton= $('.main-controls .play-pause');
 });
 var updatePlayerBarSong = function() {
 
+
     $('.song-name').text(currentSongFromAlbum.title);
     $('.artist-name').text(currentAlbum.artist);
     $('.currently-playing .artist-song-mobile').text(currentSongFromAlbum.title + " - " + currentAlbum.artist);
     $('.main-controls .play-pause').html(playerBarPauseButton);
+
+    setTotalTimeInPlayerBar(filterTimeCode(currentSongFromAlbum.duration));
 
 };
 
@@ -226,6 +234,7 @@ var nextSong = function() {
 
     setSong(currentSongIndex + 1);
      currentSoundFile.play();
+     updateSeekBarWhileSongPlays();
 
     updatePlayerBarSong();
 
@@ -250,6 +259,7 @@ var previousSong = function() {
 
     setSong(currentSongIndex + 1);
      currentSoundFile.play();
+     updateSeekBarWhileSongPlays();
 
     updatePlayerBarSong();
 
@@ -313,3 +323,19 @@ else{
 }
 
 };
+var setCurrentTimeInPlayerBar= function(currentTime){
+ $(".current-time").html(currentTime);
+};
+var setTotalTimeInPlayerBar= function(totalTime){
+
+  $(".total-time").html(totalTime);
+};
+
+var filterTimeCode = function(timeInSeconds){
+
+var minutes= Math.floor(timeInSeconds/60);
+var secondsTens= Math.floor((timeInSeconds%60)/10);
+var secondsOnes= Math.floor((timeInSeconds%60)%10);
+return minutes+":"+secondsTens+secondsOnes;
+
+}
